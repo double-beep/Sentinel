@@ -12,12 +12,12 @@ class User < ApplicationRecord
 
   def get_access_token(code, host)
     parameters = {
-      :client_id => AppConfig['se_client_id'],
-      :client_secret => AppConfig['se_client_secret'],
-      :code => code,
-      :redirect_uri => Rails.application.routes.url_helpers.url_for(:host => host, :controller => :se_auth, :action => :target)
+      client_id: AppConfig['se_client_id'],
+      client_secret: AppConfig['se_client_secret'],
+      code: code,
+      redirect_uri: Rails.application.routes.url_helpers.url_for(host: host, controller: :se_auth, action: :target)
     }
-    response = HTTParty.post('https://stackexchange.com/oauth/access_token', :body => parameters)
+    response = HTTParty.post('https://stackexchange.com/oauth/access_token', body: parameters)
     if response.code == 200
       response.parsed_response.split('=')[1]
     else
@@ -27,9 +27,8 @@ class User < ApplicationRecord
   end
 
   private
+
   def promote_if_first
-    if self.id == 1
-      self.add_role(:admin)
-    end
+    add_role(:admin) if id == 1
   end
 end

@@ -1,23 +1,24 @@
 class ReasonsController < ApplicationController
-  before_action :set_reason, :except => [:index]
-  before_action :authenticate_user!, :only => [:edit, :update, :destroy]
-  before_action :verify_admin, :only => [:edit, :update, :destroy]
+  before_action :set_reason, except: [:index]
+  before_action :authenticate_user!, only: %i[edit update destroy]
+  before_action :verify_admin, only: %i[edit update destroy]
 
   def index
-    @reasons = Reason.all.left_joins(:posts).group('reasons.id').order('count(posts.id) desc').paginate(:page => params[:page], :per_page => 50)
+    @reasons = Reason.all.left_joins(:posts).group('reasons.id').order('count(posts.id) desc').paginate(page: params[:page], per_page: 50)
   end
 
   def show
-    @posts = @reason.posts.order(:created_at => :desc).paginate(:page => params[:page], :per_page => 100)
-    @feedback_counts = FeedbackType.all.map{|ft| [ft.short_code, ft.posts.joins(:posts_reasons).where(:posts_reasons => { :reason_id => @reason.id }).distinct.count(:id)] }
+    @posts = @reason.posts.order(created_at: :desc).paginate(page: params[:page], per_page: 100)
+    @feedback_counts = FeedbackType.all.map do |ft|
+      [ft.short_code, ft.posts.joins(:posts_reasons).where(posts_reasons: { reason_id: @reason.id }).distinct.count(:id)]
+    end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @reason.update reason_params
-      redirect_to url_for(:controller => :reasons, :action => :show, :id => @reason.id)
+      redirect_to url_for(controller: :reasons, action: :show, id: @reason.id)
     else
       render :edit
     end
@@ -26,13 +27,14 @@ class ReasonsController < ApplicationController
   def destroy
     if @reason.destroy
       flash[:success] = "Removed reason #{@reason.id}."
-      redirect_to url_for(:controller => :reasons, :action => :index)
+      redirect_to url_for(controller: :reasons, action: :index)
     else
       render :show
     end
   end
 
   private
+
   def set_reason
     @reason = Reason.find params[:id]
   end

@@ -1,38 +1,72 @@
 <h3>Search Results</h3>
 
-<%= form_tag url_for(:controller => :search, :action => :results), :method => :get do %>
+# frozen_string_literal: true
+form_tag url_for(controller: :search, action: :results), method: :get
+ do %>
   <div class="field input-group">
-    <%= text_field_tag 'q', params[:q], :placeholder => "type your search term here - literal match on title, body, or username", :class => "form-control" %>
+# frozen_string_literal: true
+text_field_tag 'q', params[:q], placeholder: 'type your search term here - literal match on title, body, or username', class: 'form-control'
+ %>
     <span class="input-group-btn">
-      <%= submit_tag 'Search', :class => "btn btn-success" %>
+# frozen_string_literal: true
+submit_tag 'Search', class: 'btn btn-success'
+ %>
     </span>
   </div>
-  <br/>
+  <br>
   Feedback type
   <div class="field input-group">
-    <%= select_tag 'feedback', options_from_collection_for_select(FeedbackType.all, 'id', 'short_code'), :include_blank => true, :class => "form-control" %>
+# frozen_string_literal: true
+select_tag 'feedback', options_from_collection_for_select(FeedbackType.all, 'id', 'short_code', params[:feedback]), include_blank: true, class: 'form-control'
+ %>
     <span class="input-group-btn">
-      <%= submit_tag 'Search', :class => "btn btn-success" %>
+# frozen_string_literal: true
+submit_tag 'Search', class: 'btn btn-success'
+ %>
     </span>
   </div>
-  <br/>
-  NATO Score (returns posts above specified score) 
+  <br>
+  NATO Score (returns posts above specified score)
   <div class="field input-group">
-    <%= number_field_tag 'min_score', params[:min_score], min: -30, max: 30, :step => '1', :class => "form-control" %>
+# frozen_string_literal: true
+number_field_tag 'min_score', params[:min_score], min: -30, max: 30, step: '1', class: 'form-control'
+ %>
     <span class="input-group-btn">
-      <%= submit_tag 'Search', :class => "btn btn-success" %>
+# frozen_string_literal: true
+submit_tag 'Search', class: 'btn btn-success'
+ %>
+    </span>
+  </div>
+  <br>
+  Site
+  <div class="field input-group">
+# frozen_string_literal: true
+select_tag 'site', options_from_collection_for_select(Site.all.where(id: [1, 29]), 'id', 'name', params[:site]), include_blank: true, class: 'form-control'
+ %>
+    <span class="input-group-btn">
+# frozen_string_literal: true
+submit_tag 'Search', class: 'btn btn-success'
+ %>
     </span>
   </div>
 <% end %>
 
-<br/>
+<br>
 
-<%= pie_chart @results.joins(:reasons).joins(:feedbacks).group('feedbacks.feedback_type_id').count.map{|k,v| [(k.nil? ? "None" : FeedbackType.find(k).name), v]} %>
+# frozen_string_literal: true
+pie_chart @results.joins(:reasons).joins(:feedbacks).group('feedbacks.feedback_type_id').count.map{ |k, v| [(k.nil? ? 'None' : FeedbackType.find(k).name), v] }
+ %>
 
-<% @results.each do |post| %>
-  <%= render 'posts/post', :post => post %>
+# frozen_string_literal: true
+@results.each
+ do |post| %>
+# frozen_string_literal: true
+render 'posts/post', post: post
+ %>
 <% end %>
 
 <div class="text-center">
-  <%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
+# frozen_string_literal: true
+will_paginate @results, renderer: BootstrapPagination::Rails
+ %>
 </div>

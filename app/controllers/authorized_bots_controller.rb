@@ -1,7 +1,7 @@
 class AuthorizedBotsController < ApplicationController
   before_action :authenticate_user!
   before_action :verify_admin
-  before_action :set_bot, :only => [:destroy]
+  before_action :set_bot, only: [:destroy]
 
   def index
     @bots = AuthorizedBot.all
@@ -15,7 +15,7 @@ class AuthorizedBotsController < ApplicationController
   def create
     @bot = AuthorizedBot.new bot_params
     if @bot.save
-      redirect_to url_for(:controller => :authorized_bots, :action => :index)
+      redirect_to url_for(controller: :authorized_bots, action: :index)
     else
       render :new
     end
@@ -27,10 +27,11 @@ class AuthorizedBotsController < ApplicationController
     else
       flash[:danger] = "Can't remove #{@bot.name} - get a developer to check the logs."
     end
-    redirect_to url_for(:controller => :authorized_bots, :action => :index)
+    redirect_to url_for(controller: :authorized_bots, action: :index)
   end
 
   private
+
   def set_bot
     @bot = AuthorizedBot.find params[:id]
   end

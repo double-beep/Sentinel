@@ -1,8 +1,8 @@
 class ApiKeysController < ApplicationController
-  before_action :authenticate_user!, :except => [:index]
-  before_action :verify_admin, :only => [:admin_list]
-  before_action :set_key, :only => [:edit, :update, :destroy]
-  before_action :verify_access, :only => [:edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index]
+  before_action :verify_admin, only: [:admin_list]
+  before_action :set_key, only: %i[edit update destroy]
+  before_action :verify_access, only: %i[edit update destroy]
 
   def index
     @keys = ApiKey.all
@@ -21,18 +21,17 @@ class ApiKeysController < ApplicationController
     @key = ApiKey.new key_params
     @key.user = current_user
     if @key.save
-      redirect_to url_for(:controller => :api_keys, :action => :index)
+      redirect_to url_for(controller: :api_keys, action: :index)
     else
       render :new
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @key.update key_params
-      redirect_to url_for(:controller => :api_keys, :action => :index)
+      redirect_to url_for(controller: :api_keys, action: :index)
     else
       render :edit
     end
@@ -44,10 +43,11 @@ class ApiKeysController < ApplicationController
     else
       flash[:danger] = "Can't delete key right now - tell a developer."
     end
-    redirect_to url_for(:controller => :api_keys, :action => :index)
+    redirect_to url_for(controller: :api_keys, action: :index)
   end
 
   private
+
   def key_params
     params.require(:api_key).permit(:name, :key, :repo)
   end
@@ -57,8 +57,6 @@ class ApiKeysController < ApplicationController
   end
 
   def verify_access
-    unless current_user.has_role?(:admin) || current_user == @key.user
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError, 'Not Found' unless current_user.has_role?(:admin) || current_user == @key.user
   end
 end

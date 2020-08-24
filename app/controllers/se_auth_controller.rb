@@ -1,13 +1,12 @@
 class SeAuthController < ApplicationController
   before_action :authenticate_user!
-  before_action :verify_no_auth, :except => [:already_done, :deauth]
+  before_action :verify_no_auth, except: %i[already_done deauth]
 
-  def initiate
-  end
+  def initiate; end
 
   def redirect
     client_id = AppConfig['se_client_id']
-    redirect_uri = url_for(:controller => :se_auth, :action => :target)
+    redirect_uri = url_for(controller: :se_auth, action: :target)
     scope = 'no_expiry,write_access'
     auth_state = Digest::SHA256.hexdigest("#{current_user.username}#{rand(0..9e9)}")
 
@@ -15,50 +14,47 @@ class SeAuthController < ApplicationController
     if current_user.save
       redirect_to "https://stackexchange.com/oauth?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}&state=#{auth_state}"
     else
-      flash[:danger] = "Couldn't save a pre-auth token to your user account. Try again later, and contact a dev if the problem persists."
-      redirect_to url_for(:controller => :se_auth, :action => :initiate)
+      flash[:danger] = 'Couldn\'t save a pre-auth token to your user account. Try again later, and contact a dev if the problem persists.'
+      redirect_to url_for(controller: :se_auth, action: :initiate)
     end
   end
 
   def target
-    if current_user.auth_state.present? && current_user.auth_state == params[:state]
-      token = current_user.get_access_token(params[:code], request.host_with_port)
+    return unless current_user.auth_state.present? && current_user.auth_state == params[:state]
 
-      stack_user = StackUser.new(:user => current_user, :access_token => token)
-      if stack_user.save
-        if stack_user.update_details
-          flash[:success] = "Authentication complete."
-          redirect_to url_for(:controller => :se_auth, :action => :already_done)
-        else
-          flash[:danger] = "Can't update the user details on your user. Try again later, and contact a dev if the problem persists."
-          redirect_to url_for(:controller => :se_auth, :action => :initiate)
-        end
+    token = current_user.get_access_token(params[:code], request.host_with_port)
+    stack_user = StackUser.new(user: current_user, access_token: token)
+    if stack_user.save
+      if stack_user.update_details
+        flash[:success] = 'Authentication complete.'
+        redirect_to url_for(controller: :se_auth, action: :already_done)
       else
-        flash[:danger] = "Can't create a record for your Stack Exchange user. Try again later, and contact a dev if the problem persists."
-        redirect_to url_for(:controller => :se_auth, :action => :initiate)
+        flash[:danger] = 'Can\'t update the user details on your user. Try again later, and contact a dev if the problem persists.'
+        redirect_to url_for(controller: :se_auth, action: :initiate)
       end
+    else
+      flash[:danger] = 'Can\'t create a record for your Stack Exchange user. Try again later, and contact a dev if the problem persists.'
+      redirect_to url_for(controller: :se_auth, action: :initiate)
     end
   end
 
-  def already_done
-  end
+  def already_done; end
 
   def deauth
     @user = User.find params[:user_id]
-    if current_user.id == params[:user_id] || current_user.has_role?(:admin)
-      if @user.stack_user.destroy
-        flash[:success] = "Removed SE auth details successfully."
-      else
-        flash[:danger] = "Failed to remove SE auth details."
-      end
-      redirect_back(fallback_location: root_path)
+    return unless current_user.id == params[:user_id] || current_user.has_role?(:admin)
+
+    if @user.stack_user.destroy
+      flash[:success] = 'Removed SE auth details successfully.'
+    else
+      flash[:danger] = 'Failed to remove SE auth details.'
     end
+    redirect_back(fallback_location: root_path)
   end
 
   private
+
   def verify_no_auth
-    if current_user.stack_user.present?
-      redirect_to url_for(:controller => :se_auth, :action => :already_done)
-    end
+    redirect_to url_for(controller: :se_auth, action: :already_done) if current_user.stack_user.present?
   end
 end

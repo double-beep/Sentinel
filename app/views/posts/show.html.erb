@@ -16,7 +16,7 @@
   </div>
 </div>
 
-<br/>
+<br>
 
 <% if user_signed_in? %>
   <% if current_user.stack_user.present? %>
@@ -29,7 +29,7 @@
       to flag this post.
     </p>
   <% end %>
-  <br/>
+  <br>
 <% end %>
 
 <p><strong>Caught by <%= pluralize(@post.reasons.count, "reason") %>:</strong></p>
@@ -39,7 +39,7 @@
   <% end %>
 </ul>
 
-<br/>
+<br>
 
 <% if user_signed_in? && current_user.has_role?(:admin) %>
   <div class="panel panel-info">
@@ -57,7 +57,7 @@
 <% end %>
 
 <div class="modal fade">
-  <div class="modal-dialog" >
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

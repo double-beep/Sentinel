@@ -15,7 +15,7 @@
       <tr>
         <td><%= feedback.id %></td>
         <td>
-          <% link = "https://chat.#{@users.where(:chat_so_id => feedback.chat_id).present? ? "stackoverflow" : "stackexchange"}.com/users/#{feedback.chat_id}"%>
+          <% link = "https://chat.#{@users.where(:chat_so_id => feedback.chat_id).present? ? "stackoverflow" : "stackexchange"}.com/users/#{feedback.chat_id}" %>
           <%= link_to feedback.chat_username, link %>
           <% user = @users.where(:chat_so_id => feedback.chat_id).or(@users.where(:chat_se_id => feedback.chat_id)) %>
           <% if user.present? %>

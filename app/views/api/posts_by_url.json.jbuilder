@@ -5,4 +5,4 @@ json.items @results.each do |post|
   })
 end
 
-json.has_more has_more(@count, @pagesize, params[:page])
+json.has_more more_items?(@count, @pagesize, params[:page])

@@ -7,9 +7,9 @@
           <% if resource.errors.any? %><div class="alert alert-danger"><%= devise_error_messages! %></div><% end %>
 
           <div class="field">
-            <%= f.label :email %><br />
+            <%= f.label :email %><br>
             <%= f.email_field :email, autofocus: true, class: 'form-control' %>
-          </div><br/>
+          </div><br>
 
           <div class="actions">
             <%= f.submit "Send me reset password instructions", class: 'btn btn-primary' %>

@@ -4,14 +4,14 @@
 
 <%= form_for @bot, url: url_for(:controller => :authorized_bots, :action => :create) do |f| %>
   <div class="field">
-    <%= f.label :name %><br/>
+    <%= f.label :name %><br>
     <%= f.text_field :name, :class => "form-control" %>
-  </div><br/>
+  </div><br>
 
   <div class="field">
-    <%= f.label :key %><br/>
+    <%= f.label :key %><br>
     <%= f.text_field :key, :class => "form-control" %>
-  </div><br/>
+  </div><br>
 
   <div class="actions">
     <%= f.submit "Create", :class => "btn btn-primary" %>

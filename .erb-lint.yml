@@ -1,0 +1,9 @@
+---
+EnableDefaultLinters: true
+glob: "app/**/*.{html,text,js}{+*,}.erb"
+linters:
+  Rubocop:
+    enabled: true
+    rubocop_config:
+      inherit_from:
+        - .rubocop.yml
