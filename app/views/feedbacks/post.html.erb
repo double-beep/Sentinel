@@ -1,5 +1,5 @@
 <h3>Post Feedback</h3>
-<p>Feedback on: <%= link_to @post.title, url_for(:controller => :posts, :action => :show, :id => @post.id) %></p>
+<p>Feedback on: <%= link_to @post.title, url_for(controller: :posts, action: :show, id: @post.id) %></p>
 
 <table class="table table-striped">
   <thead>
@@ -15,15 +15,16 @@
       <tr>
         <td><%= feedback.id %></td>
         <td>
-          <% link = "https://chat.#{@users.where(:chat_so_id => feedback.chat_id).present? ? "stackoverflow" : "stackexchange"}.com/users/#{feedback.chat_id}"%>
+          <% link = "https://chat.#{@users.where(chat_so_id: feedback.chat_id).present? ? 'stackoverflow' : 'stackexchange'}" \
+                    ".com/users/#{feedback.chat_id}" %>
           <%= link_to feedback.chat_username, link %>
-          <% user = @users.where(:chat_so_id => feedback.chat_id).or(@users.where(:chat_se_id => feedback.chat_id)) %>
+          <% user = @users.where(chat_so_id: feedback.chat_id).or(@users.where(chat_se_id: feedback.chat_id)) %>
           <% if user.present? %>
             (<%= user.first.username %>)
           <% end %>
         </td>
         <td style="color:<%= feedback.feedback_type.color %> !important;">
-          <%= link_to feedback.feedback_type.name, url_for(:controller => :posts, :action => :with_feedback, :type => feedback.feedback_type.short_code) %>
+          <%= link_to feedback.feedback_type.name, url_for(controller: :posts, action: :with_feedback, type: feedback.feedback_type.short_code) %>
         </td>
         <td><%= time_ago_in_words(feedback.created_at) %> ago</td>
       </tr>

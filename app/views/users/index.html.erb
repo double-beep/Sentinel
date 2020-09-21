@@ -18,21 +18,25 @@
         <td><%= user.id %></td>
         <td>
           <% if user_signed_in? && current_user.has_role?(:admin) %>
-            <%= link_to user.username, url_for(:controller => :users, :action => :show, :id => user.id) %>
+            <%= link_to user.username, url_for(controller: :users, action: :show, id: user.id) %>
           <% else %>
             <%= user.username %>
           <% end %>
         </td>
         <td><%= time_ago_in_words(user.created_at) %> ago</td>
-        <td><%= user.has_role?(:admin) ? "Admin" : "Regular" %></td>
+        <td><%= user.has_role?(:admin) ? 'Admin' : 'Regular' %></td>
         <% if user_signed_in? && current_user.has_role?(:admin) %>
           <td>
             <% if user.has_role?(:admin) %>
-              <%= link_to "Demote", url_for(:controller => :users, :action => :demote, :id => user.id), :class => "text-danger",
-                          :method => :post, :data => { :confirm => "Remove admin rights from #{user.username}?" } %>
+              <%= link_to 'Demote', url_for(controller: :users, action: :demote, id: user.id),
+                          class: 'text-danger',
+                          method: :post,
+                          data: { confirm: "Remove admin rights from #{user.username}?" } %>
             <% else %>
-              <%= link_to "Promote", url_for(:controller => :users, :action => :promote, :id => user.id), :class => "text-danger",
-                          :method => :post, :data => { :confirm => "Promote #{user.username} to admin?" } %>
+              <%= link_to 'Promote', url_for(controller: :users, action: :promote, id: user.id)
+               class: 'text-danger',
+                                                                                        method: :post,
+                                                                data: { confirm: "Promote #{user.username} to admin?" } %>
             <% end %>
           </td>
         <% end %>
@@ -41,5 +45,5 @@
   </tbody>
 </table>
 <div class="text-center">
-  <%= will_paginate @users, :renderer => BootstrapPagination::Rails %>
+  <%= will_paginate @users, renderer: BootstrapPagination::Rails %>
 </div>

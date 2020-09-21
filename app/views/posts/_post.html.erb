@@ -1,14 +1,14 @@
 <div class="post clearfix">
   <div class="post-title pull-left text-left">
-    <%= link_to post.title, url_for(:controller => :posts, :action => :show, :id => post.id) %>
+    <%= link_to post.title, url_for(controller: :posts, action: :show, id: post.id) %>
     <% if post.majority_feedback %>
-      <%= render 'feedbacks/feedback', :type => post.majority_feedback, :post => post %>
+      <%= render 'feedbacks/feedback', type: post.majority_feedback, post: post %>
     <% end %>
   </div>
   <div class="post-meta pull-right text-right">
     <%= time_ago_in_words(post.created_at) %> ago <strong>(<%= post.nato_score %>)</strong>
     <% if post.site.present? %>
-      <%= link_to (image_tag post.site.logo, size: "20"), post.link %>
+      <%= link_to (image_tag post.site.logo, size: '20'), post.link %>
     <% end %>
   </div>
 </div>

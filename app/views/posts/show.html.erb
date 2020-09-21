@@ -1,7 +1,7 @@
 <h3>
   <%= link_to @post.title, @post.link %>
   <% if @post.majority_feedback %>
-    <%= render 'feedbacks/feedback', :type => @post.majority_feedback, :post => @post %>
+    <%= render 'feedbacks/feedback', type: @post.majority_feedback, post: @post %>
   <% end %>
 </h3>
 <p><strong>Detection score: </strong><%= @post.nato_score %></p>
@@ -16,7 +16,7 @@
   </div>
 </div>
 
-<br/>
+<br>
 
 <% if user_signed_in? %>
   <% if current_user.stack_user.present? %>
@@ -25,21 +25,21 @@
     </p>
   <% else %>
     <p class="text-muted">
-      <span class="glyphicon glyphicon-flag"></span> <%= link_to "Authenticate with Stack Exchange", url_for(:controller => :se_auth, :action => :initiate) %>
+      <span class="glyphicon glyphicon-flag"></span> <%= link_to 'Authenticate with Stack Exchange', url_for(controller: :se_auth, action: :initiate) %>
       to flag this post.
     </p>
   <% end %>
-  <br/>
+  <br>
 <% end %>
 
-<p><strong>Caught by <%= pluralize(@post.reasons.count, "reason") %>:</strong></p>
+<p><strong>Caught by <%= pluralize(@post.reasons.count, 'reason') %>:</strong></p>
 <ul class="post-reasons">
   <% @post.reasons.each do |reason| %>
-    <li><%= link_to reason.name, url_for(:controller => :reasons, :action => :show, :id => reason.id) %></li>
+    <li><%= link_to reason.name, url_for(controller: :reasons, action: :show, id: reason.id) %></li>
   <% end %>
 </ul>
 
-<br/>
+<br>
 
 <% if user_signed_in? && current_user.has_role?(:admin) %>
   <div class="panel panel-info">
@@ -48,16 +48,17 @@
     </div>
     <div class="panel-body">
       <ul>
-        <li><%= link_to "Edit", url_for(:controller => :posts, :action => :edit, :id => @post.id) %></li>
-        <li><%= link_to "Delete", url_for(:controller => :posts, :action => :destroy, :id => @post.id), :method => :delete,
-                :class => "text-danger", :data => { :confirm => "Are you sure? This can't be undone." } %></li>
+        <li><%= link_to 'Edit', url_for(controller: :posts, action: :edit, id: @post.id) %></li>
+        <li><%= link_to 'Delete', url_for(controller: :posts, action: :destroy, id: @post.id),
+                        method: :delete,
+                        class: 'text-danger', data: { confirm: "Are you sure? This can't be undone." } %></li>
       </ul>
     </div>
   </div>
 <% end %>
 
 <div class="modal fade">
-  <div class="modal-dialog" >
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

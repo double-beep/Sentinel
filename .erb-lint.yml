@@ -1,5 +1,4 @@
 ---
-EnableDefaultLinters: true
 glob: "app/**/*.{html,text,js}{+*,}.erb"
 linters:
   Rubocop:
@@ -7,5 +6,37 @@ linters:
     rubocop_config:
       inherit_from:
         - .rubocop.yml
-      Style/FrozenStringLiteralComment:
-        enabled: false
+      Layout/InitialIndentation:
+        Enabled: false
+      Layout/TrailingEmptyLines:
+        Enabled: false
+      Lint/UselessAssignment:
+        Enabled: false
+  AllowedScriptType:
+    enabled: true
+  ClosingErbTagIndent:
+    enabled: true
+  ExtraNewline:
+    enabled: true
+  FinalNewline:
+    enabled: true
+  NoJavascriptTagHelper:
+    enabled: true
+  ParserErrors:
+    enabled: true
+  RightTrim:
+    enabled: true
+  SelfClosingTag:
+    enabled: true
+  SpaceAroundErbTag:
+    enabled: true
+  SpaceIndentation:
+    enabled: true
+  SpaceInHtmlTag:
+    enabled: true
+  TrailingWhitespace:
+    enabled: true
+  DeprecatedClasses:
+    enabled: false
+  ErbSafety:
+    enabled: true

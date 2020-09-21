@@ -12,7 +12,7 @@
   <tbody>
     <% @feedbacks.each do |feedback| %>
       <tr>
-        <td><%= link_to feedback.title, url_for(:controller => :posts, :action => :show, :id => feedback.id) %></td>
+        <td><%= link_to feedback.title, url_for(controller: :posts, action: :show, id: feedback.id) %></td>
         <td style="color: <%= feedback.color %>"><%= feedback.short_code %></td>
         <td><%= time_ago_in_words(feedback.created_at) %> ago</td>
       </tr>
@@ -21,5 +21,5 @@
 </table>
 
 <div class="text-center">
-  <%= will_paginate @feedbacks, :renderer => BootstrapPagination::Rails %>
+  <%= will_paginate @feedbacks, renderer: BootstrapPagination::Rails %>
 </div>

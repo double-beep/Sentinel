@@ -2,9 +2,9 @@
 <p>A list of all posts with <%= @type.name %> feedback.</p>
 
 <% @posts.each do |post| %>
-  <%= render 'posts/post', :post => post %>
+  <%= render 'posts/post', post: post %>
 <% end %>
 
 <div class="text-center">
-  <%= will_paginate @posts, :renderer => BootstrapPagination::Rails %>
+  <%= will_paginate @posts, renderer: BootstrapPagination::Rails %>
 </div>
