@@ -8,17 +8,12 @@ Bundler.require(*Rails.groups)
 
 module Sentinel
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 6.0
 
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins '*'
-        resource '/api/*', :headers => :any, :methods => [:get]
-        # resource '/api/w/*', :headers => :any, :methods => [:post], :credentials => true
-        # resource '/oauth/token', :headers => :any, :methods => [:get]
-      end
-    end
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
   end
 end
