@@ -1,0 +1,53 @@
+name: Test
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_USER: root
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306
+    env:
+      RAILS_ENV: test
+      RACK_ENV: test
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.5
+    - uses: actions/cache@v2
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+    - name: Install dependencies
+      run: |
+        sudo apt-get install libmariadb-dev
+        bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+    - name: Configure
+      run: |
+        cp config/config.sample.yml config/config.yml
+        echo 'test:
+          adapter: mysql2
+          database: sentinel_test
+          username: root
+          password: root
+          host: 127.0.0.1
+          port: ${{ job.services.mysql.ports['3306'] }}
+        ' > config/database.yml
+    - name: Rubocop
+      run: bundle exec rubocop
+    - name: erblint
+      run: bundle exec erblint --lint-all
+    - name: Create database
+      run: bundle exec rake db:create db:migrate db:seed --trace
