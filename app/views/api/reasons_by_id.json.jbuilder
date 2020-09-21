@@ -4,4 +4,4 @@ json.items(@results) do |reason|
     :feedback_counts => @feedback_counts
   })
 end
-json.has_more has_more(@count, @pagesize, params[:page])
+json.has_more more?(@count, @pagesize, params[:page])

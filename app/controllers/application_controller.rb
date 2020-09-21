@@ -4,33 +4,29 @@ class ApplicationController < ActionController::Base
   helper_method :api_url
 
   protected
+
   def verify_bot_authorized
     @bot = AuthorizedBot.find_by_key(params[:authorization])
-    unless @bot.present?
-      render :plain => "YOU SHALL NOT PASS!", :status => 403
-    end
+    render plain: 'YOU SHALL NOT PASS!', status: 403 unless @bot.present?
   end
 
   def verify_admin
-    unless current_user.has_role?(:admin)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError, 'Not Found' unless current_user.has_role?(:admin)
   end
 
   def api_url(path, user = nil, params = {})
     url = "https://api.stackexchange.com/2.2#{path}?key=#{AppConfig['se_api_key']}"
-    if user&.stack_user
-      url += "&access_token=#{user.stack_user.access_token}"
-    end
+    url += "&access_token=#{user.stack_user.access_token}" if user&.stack_user
 
     params.each do |key, val|
-      url += "&#{key.to_s}=#{val.to_s}"
+      url += "&#{key}=#{val}"
     end
 
     url
   end
 
   private
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
   end

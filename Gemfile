@@ -42,6 +42,9 @@ gem 'chartkick'
 
 gem "awesome_print"
 
+gem 'rubocop'
+gem 'erb_lint', require: false
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

@@ -1,0 +1,76 @@
+AllCops:
+  NewCops: disable
+  Include:
+    - '**/Rakefile'
+    - '**/config.ru'
+    - 'app/**/*.rb'
+  Exclude:
+    - 'lib/**/*'
+    - 'bin/**/*'
+    - 'script/**/*'
+    - '**/*.json.jbuilder'
+    - 'vendor/bundle/**/*'
+    - 'node_modules/**/*'
+    - 'db/schema.rb' # auto-generated :(
+    - 'Capfile'
+    - 'config/routes.rb'
+    - 'zhregex/**/**/**/*'
+    - 'redis-git/**/**/**/*'
+    - 'db/migrate/*.rb'
+  TargetRubyVersion: 2.4
+
+Style/Documentation:
+  Enabled: false
+Naming/FileName:
+  Exclude:
+    - Gemfile
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: always
+  Enabled: false 
+  Exclude:
+    - db/migrate/*
+Style/NumericPredicate:
+  AutoCorrect: true
+  EnforcedStyle: comparison
+  Enabled: true
+Style/AsciiComments:
+  Enabled: false
+Style/Lambda:
+  EnforcedStyle: literal
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+# Want to refactor some stuff? Remove these.
+Metrics/AbcSize:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 150
+  Exclude:
+    - 'db/migrate/*'
+Layout/LineLength:
+  Max: 150
+Metrics/ClassLength:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Metrics/BlockLength:
+  Max: 30
+  ExcludedMethods:
+    - scope
+    - configure
+    - draw
+    - define
+    - test
+    - helpers
+    - field
+    - included
+    - step
+  Exclude:
+    - db/migrate/*.rb
+    - 'app/views/**/*.builder'
+    - app/jobs/clean_redis_job.rb

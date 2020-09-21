@@ -1,13 +1,13 @@
 class DeletionLog < ApplicationRecord
   belongs_to :post
 
-  validates :is_deleted, :presence => true
+  validates :is_deleted, presence: true
 
-  def self.get_statuses
+  def self.fetch_statuses
     api_key = AppConfig['se_api_key']
 
-    eligible = Post.left_joins(:deletion_logs).where(:deletion_logs => { :id => nil }).where('posts.created_at > ?', 2.years.ago)
-    logger.debug "[DeletionLog#get_statuses] Counted #{eligible.count} Posts eligible for DL checking."
+    eligible = Post.left_joins(:deletion_logs).where(deletion_logs: { id: nil }).where('posts.created_at > ?', 2.years.ago)
+    logger.debug "[DeletionLog#fetch_statuses] Counted #{eligible.count} Posts eligible for DL checking."
 
     eligible.in_groups_of(100, false).each do |group|
       ids = group.pluck(:answer_id)
@@ -21,18 +21,18 @@ class DeletionLog < ApplicationRecord
         end
 
         deleted_ids = ids - remaining_ids
-        logger.debug "[DeletionLog#get_statuses] #{deleted_ids.length} of 100-batch of Posts have been deleted."
+        logger.debug "[DeletionLog#fetch_statuses] #{deleted_ids.length} of 100-batch of Posts have been deleted."
         deleted_ids.each do |id|
           post = Post.find_by_answer_id id
-          DeletionLog.create(:post => post, :is_deleted => true)
+          DeletionLog.create(post: post, is_deleted: true)
         end
 
         if json['backoff']
-          logger.debug "[DeletionLog#get_statuses] Received API backoff; sleeping for #{json['backoff']} seconds."
+          logger.debug "[DeletionLog#fetch_statuses] Received API backoff; sleeping for #{json['backoff']} seconds."
           sleep json['backoff']
         end
       else
-        logger.error "[DeletionLog#get_statuses] Received #{response.code} from API: #{response.body}"
+        logger.error "[DeletionLog#fetch_statuses] Received #{response.code} from API: #{response.body}"
       end
     end
   end
