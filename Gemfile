@@ -39,7 +39,7 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'whenever', :require => false
 gem 'httparty'
 
-gem 'groupdate', "~> 5.2.1"
+gem 'groupdate', "~> 5.2.2"
 gem 'chartkick'
 
 gem "awesome_print"
