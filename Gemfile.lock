@@ -175,7 +175,7 @@ GEM
     parallel (1.20.1)
     parser (3.0.1.1)
       ast (~> 2.4.1)
-    puma (4.3.6)
+    puma (5.2.2)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -311,7 +311,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   mysql2
-  puma (~> 4.3)
+  puma (~> 5.2)
   rack-cors
   rails
   rolify
