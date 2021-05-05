@@ -17,7 +17,7 @@ AllCops:
     - 'zhregex/**/**/**/*'
     - 'redis-git/**/**/**/*'
     - 'db/migrate/*.rb'
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.7
 
 Style/Documentation:
   Enabled: false
@@ -60,7 +60,7 @@ Metrics/ModuleLength:
   Enabled: false
 Metrics/BlockLength:
   Max: 30
-  ExcludedMethods:
+  IgnoredMethods:
     - scope
     - configure
     - draw

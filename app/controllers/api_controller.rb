@@ -26,7 +26,7 @@ class ApiController < ApplicationController
     @count = @results.count
     @results = @results.order(id: :desc).paginate(page: params[:page], per_page: @pagesize)
     @feedback_counts = Post.joins(:reasons).joins(:feedbacks).where(reasons: { id: reason.id }).group('feedbacks.feedback_type_id')
-                           .count.map { |k, v| [(k.nil? ? 'None' : FeedbackType.find(k).short_code), v] }.to_h
+                           .count.transform_keys { |k| (k.nil? ? 'None' : FeedbackType.find(k).short_code) }
     render :reasons_by_id, formats: :json
   end
 
@@ -34,7 +34,7 @@ class ApiController < ApplicationController
     @reasons = Reason.where('name LIKE \'Contains Blacklisted Word - %\'')
     @feedback_stats = Reason.where(id: @reasons.map(&:id)).map do |r|
       [r.id, Post.joins(:reasons).joins(:feedbacks).where(reasons: { id: r.id }).group('feedbacks.feedback_type_id').count
-                 .map { |k, v| [(k.nil? ? 'None' : FeedbackType.find(k).short_code), v] }.to_h]
+                 .transform_keys { |k| (k.nil? ? 'None' : FeedbackType.find(k).short_code) }]
     end.to_h
     render :blacklist_stats, formats: :json
   end
