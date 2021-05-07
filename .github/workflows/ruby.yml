@@ -38,7 +38,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get install libmariadb-dev
-        bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+        bundle config set --local path 'vendor/bundle'
+        bundle check || bundle install --jobs=4 --retry=3
     - name: Configure
       run: |
         cp config/config.sample.yml config/config.yml
