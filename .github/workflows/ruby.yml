@@ -12,7 +12,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:latest
         env:
           MYSQL_USER: root
           MYSQL_ROOT_PASSWORD: root
@@ -28,12 +28,13 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7
-    - uses: actions/cache@v2
+    - name: Cache bundle
+      uses: actions/cache@v2
       with:
         path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        key: ${{ runner.os }}-gems-${{ env.ACTION_CACHE_VERSION }}-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-gems-
+          ${{ runner.os }}-gems-${{ env.ACTION_CACHE_VERSION }}-
     - name: Install dependencies
       run: |
         sudo apt-get install libmariadb-dev
@@ -46,7 +47,7 @@ jobs:
           database: sentinel_test
           username: root
           password: root
-          host: 127.0.0.1
+          host: localhost
           port: ${{ job.services.mysql.ports['3306'] }}
         ' > config/database.yml
     - name: Rubocop
@@ -54,4 +55,7 @@ jobs:
     - name: erblint
       run: bundle exec erblint --lint-all
     - name: Create database
-      run: bundle exec rake db:create db:migrate db:seed --trace
+      run: |
+        sudo systemctl start mysql.service
+        mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';"
+        bundle exec rake db:create db:migrate db:seed --trace
