@@ -37,6 +37,7 @@ jobs:
           ${{ runner.os }}-gems-${{ env.ACTION_CACHE_VERSION }}-
     - name: Install dependencies
       run: |
+        sudo apt-get update
         sudo apt-get install libmariadb-dev
         bundle config set --local path 'vendor/bundle'
         bundle check || bundle install --jobs=4 --retry=3
