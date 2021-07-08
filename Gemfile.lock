@@ -98,7 +98,7 @@ GEM
       sshkit (>= 1.17.0)
     capistrano-upload-config (0.8.2)
       capistrano (>= 3.0)
-    chartkick (4.0.4)
+    chartkick (4.0.5)
     chronic (0.10.2)
     coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
